@@ -87,10 +87,10 @@
             <div class="col-md-4 col-md-push-8" itemscope itemtype="http://schema.org/LocalBusiness">
                 <span itemprop="name"><h3>Great Cuts</h3></span>
                 <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-                    <span itemprop="streetAddress">27871 S Dixie Hwy</span><br>
+                    <a style="cursor: pointer;" id="address" href="http://www.google.com/maps/dir/Current+Location/25.507945,-80.43762"><span itemprop="streetAddress">27871 S Dixie Hwy</span><br>
                     <span itemprop="addressLocality">Homestead</span>,
                     <span itemprop="addressRegion">FL</span>
-                    <span itemprop="postalCode">33032</span>
+                    <span itemprop="postalCode">33032</span></a>
                 </div>
                 <p><i class="fa fa-phone"></i>
                     <abbr title="Business Phone">B</abbr>: <span itemprop="telephone">(305) 247-4077</span></p>
@@ -133,6 +133,7 @@
 
     <!-- jQuery -->
     <script src="../js/jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.3.0.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../js/bootstrap.min.js"></script>
@@ -146,6 +147,54 @@
       ga('create', 'UA-55477420-3', 'auto');
       ga('send', 'pageview');
     
+    </script>
+    
+    <script>
+        function myNavFunc(){
+            var ua = navigator.userAgent.toLowerCase();
+                plat = navigator.platform;
+                protocol = 'http://www.google.com/maps/';
+                a = $("#address");
+                href = "dir/Current+Location/25.507945,-80.43762";
+            
+            $.browser.device = ua.match(/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera/i) ? ua.match(/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera/i)[0] : false;
+    
+    
+            if ($.browser.device) {
+                switch($.browser.device) {
+                    case 'iphone':
+                    case 'ipad':
+                    case 'ipod':
+                        function iOSversion() {
+                          if (/iP(hone|od|ad)/.test(navigator.platform)) {
+                            // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
+                            var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+                            return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+                          }
+                        }
+            
+                        var ver = iOSversion() || [0];
+            
+                        if (ver[0] >= 6) {
+                          protocol = 'maps://';
+                        }
+                        else {
+                            protocol = 'http://www.google.com/maps/';
+                        }
+                    break;
+            
+                    case 'android':
+                    default:
+                        protocol = 'http://www.google.com/maps/';
+                    break;
+                }
+            }
+            console.log(a);
+            console.log(ua);
+            console.log(plat);
+            console.log(protocol + href);
+            a.attr('href', protocol + href);
+        }
     </script>
 
 </body>
